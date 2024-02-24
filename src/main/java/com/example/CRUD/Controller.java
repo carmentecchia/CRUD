@@ -6,48 +6,57 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cars")
 public class Controller {
     @Autowired
     private CarRepository carRepository;
-    @PostMapping("/add-car")
-    public Car newCar(@RequestBody Car car){
-        return carRepository.saveAndFlush(car);
+
+    @PostMapping
+    public Car create(@RequestBody Car car) {
+        Car createdCar = carRepository.save(car);
+        return createdCar;
     }
-    @GetMapping("/all-cars")
-    public List<Car> allCars(){
-        return carRepository.findAll();
+
+    @GetMapping
+    public List<Car> getCars() {
+        List<Car> cars = carRepository.findAll();
+        return cars;
     }
+
     @GetMapping("/{id}")
-    public Car carById(@PathVariable Long id){
-        Car carFounded = null;
-        if(carRepository.existsById(id)){
-            carFounded = carRepository.getReferenceById(id);
+    public Optional<Car> getACar(@PathVariable Long id) {
+        if (carRepository.existsById(id)) {
+            Optional<Car> car = carRepository.findById(id);
+            return car;
         }
-        return carFounded;
+        return null;
     }
-    @PutMapping("/update-type/{id}")
-    public Car updateCar(@PathVariable Long id, @RequestParam String type){
-        Car carUpdated = carById(id);
-        if(carUpdated!=null){
-            carUpdated.setType(type);
-            carRepository.save(carUpdated);
+
+    @PutMapping("/{id}")
+    public Car updateTypeCar(@PathVariable Long id, @RequestBody String type) {
+        if (carRepository.existsById(id)) {
+            Car car = carRepository.findById(id).get();
+            car.setType(type);
+            Car carUpdated = carRepository.save(car);
+            return carUpdated;
         }
-        return carUpdated;
+        return null;
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteCar(@PathVariable Long id) {
+
+    @DeleteMapping("/{id}")
+    public void deleteACar(@PathVariable Long id) {
         if (carRepository.existsById(id)) {
             carRepository.deleteById(id);
-            return ResponseEntity.ok("Auto eliminata con successo");
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Auto id " + id + " non trovata");
+            System.out.println("Conflict HTTP status");
         }
     }
-    @DeleteMapping("/delete-all")
-    public void deleteDb(){
+
+    @DeleteMapping("/deleteAll")
+    public void deleteAllCar() {
         carRepository.deleteAll();
     }
 }
