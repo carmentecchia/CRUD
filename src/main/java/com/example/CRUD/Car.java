@@ -1,49 +1,23 @@
 package com.example.CRUD;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Table
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Car {
+    @Id
+            @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
+    @Column(unique = true)
     String modelName;
+    @Column(unique = true)
     String type;
 
-    public Car() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getModelName() {
-        return modelName;
-    }
-
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Car(Long id, String modelName, String type) {
-        this.id = id;
-        this.modelName = modelName;
-        this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "Car{" +
-                "id=" + id +
-                ", modelName='" + modelName + '\'' +
-                ", type='" + type + '\'' +
-                '}';
-    }
 }
+

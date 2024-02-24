@@ -1,7 +1,7 @@
 spring:
+  username: root
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/exe
-    username: root
+    url: jdbc:mysql://127.0.0.1:3306/Car
     password: carm2394
   jpa:
     database: mysql
